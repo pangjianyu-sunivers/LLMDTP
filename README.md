@@ -8,26 +8,39 @@ Follow steps 1 to 4 below to set up the Python environment on a server. The serv
 
 # step 1
 # Please install the environment first with conda by running the following code in the terminal, and enter the environment
+
 conda create -n glm4 python=3.9.13 -y 
+
 conda activate glm4 
+
 pip install zhipuai requests flask 
+
 conda create -n embedding python=3.10 -y 
+
 conda activate embedding 
 
 # step 2
 # And install the following packets
+
 pip install chromadb streamlit flask sentence_transformers requests fastapi uvicorn transformers gtts pydub pygtrans pydantic-settings
 
 # step 3
 # We use the glm4 as an example of our demo, start the api service fisrt
 # Move to the same location of README.md, run the following code
+
 conda activate glm4
+
 cd to_NBE
+
 nohup python CHATZOC_glm4_jump_api.py &
 
 # step 4
 # Now we gonna open our system, run the following code
+
 conda activate embedding
+
 cd demo_NBE
+
 nohup python teaching_api.py &
+
 nohup streamlit run SP_choose.py &
