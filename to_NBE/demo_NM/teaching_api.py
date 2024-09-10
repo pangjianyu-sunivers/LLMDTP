@@ -10,19 +10,12 @@ import random
 app = Flask(__name__)
 
 
-#《---------------------------------------知识库构建--------------------------------------------------》
-
-chroma_client = chromadb.Client() # 使用Chroma的Client对象访问数据库
+chroma_client = chromadb.Client() 
 emb_fn = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="../../distiluse-base-multilingual-cased-v1")
-collection = chroma_client.get_or_create_collection(name="chatZOC", embedding_function=emb_fn) # 使用Python在Chroma中创建一个集合（Collection），集合是存储嵌入、文档和任何其他元数据的地方。
+collection = chroma_client.get_or_create_collection(name="chatZOC", embedding_function=emb_fn) 
 
-# 函数用于加载数据到Chroma
 def load_data_to_chroma(data_path):
-    """
-    加载 json 数据中的知识库，注意metadata
-    """
-    ## 加入打分机制的数据库
-    # if data_path == 'knowledge_base_new/病例5-打分test-原1.json':
+
     if 'modified' in data_path:
         with open(data_path, 'r', encoding='utf-8') as file:
             jss = json.load(file)
@@ -32,15 +25,11 @@ def load_data_to_chroma(data_path):
             # print(jss[:]['no.'].values())
             ids = list((jss['no.']).values())
             ids = [str(x) for x in ids]
-            documents = list((jss['医生问诊问题']).values())     # 知识库
-
-            # Parsing the data into the desired format
+            documents = list((jss['医生问诊问题']).values())     
             metadatas = []
 
-            # Iterating over the keys of the '问题' dictionary
             for key in jss['医生问诊问题'].keys():
                 entry = {
-                    # 复杂 list comprehension
                     k: jss[k][key] if jss[k][key] is not None else "" for k in ["no.", "问题的序号", "问题得分", "病历分类", "大类别", "小类别", "症状细节", "医生问诊问题", "是否需要问该问题（0不需要问，1必须要问，2可问可不问）", "患者信息（病历）", "口语化回答", "口语化回答1", "口语化回答0"]
                 }
                 metadatas.append(entry)
@@ -50,47 +39,30 @@ def load_data_to_chroma(data_path):
         with open(data_path, 'r', encoding='utf-8') as file:
             jss = json.load(file)
 
-            # parse
-            # print(jss[:]['no.'])
-            # print(jss[:]['no.'].values())
             ids = list((jss['no.']).values())
             ids = [str(x) for x in ids]
-            documents = list((jss['医生问诊问题']).values())     # 知识库
+            documents = list((jss['医生问诊问题']).values())    
 
-            # Parsing the data into the desired format
             metadatas = []
 
-            # Iterating over the keys of the '问题' dictionary
             for key in jss['医生问诊问题'].keys():
                 entry = {
-                    # 复杂 list comprehension
                     k: jss[k][key] if jss[k][key] is not None else "" for k in ["no.", "问题的序号", "问题得分", "病历分类", "大类别", "小类别", "症状细节", "医生问诊问题", "是否需要问该问题（0不需要问，1必须要问，2可问可不问）", "患者信息（病历）", "口语化回答1", "口语化回答0"]
                 }
                 metadatas.append(entry)
         return documents, metadatas, ids
 
 
-# @title
-# 加载数据并插入/更新到集合
 def building_collection(data_path):
 
     del_ids = collection.get(include=["documents"])['ids']
-    # print(del_ids)
     if del_ids != []:
         collection.delete(ids=del_ids)
     documents, metadatas, ids = load_data_to_chroma(data_path)
-    # print(ids)
 
     collection.upsert(documents=documents, metadatas=metadatas, ids=ids)
-    # print(collection.count())
 
-
-"""## teach agent 主体"""
-
-# @title
-# 函数用于将用户输入转换为嵌入，并查询最相关的文档
 def convert_to_embedding(user_input, n_results=1, collection=collection):
-    # 调用知识库检索最相关的依据材料
     results = collection.query(
         query_texts=[user_input],
         n_results=n_results
@@ -98,13 +70,8 @@ def convert_to_embedding(user_input, n_results=1, collection=collection):
     return results
 
 
-# 函数用于解析查询结果并返回相关的支持材料
 def parse_response(res, verbose=True):
-    """
-    写一些 bug proof 代码
-    根据 distance 选择 dis < 0.5 的回答，
-    如果有多条回答，则用 '\n'连接, '\n'.join(text_list)
-    """
+
     distance_cutoff0 = 0.85
     distance_cutoff1 = 0.65
     distance_cutoff2 = 0.35
@@ -115,16 +82,10 @@ def parse_response(res, verbose=True):
     distances = res['distances'][0]
 
     if len(distances) == 0 or min(distances) > distance_cutoff0:
-        """
-        没有命中
-        """
         flag = -1
         state = {}
         return "No match from database", flag, state
     elif min(distances) < distance_cutoff0 and min(distances) > distance_cutoff1:
-        """
-        没有命中
-        """
         flag = 0
         state = {}
         return "No match from database", flag, state
@@ -132,43 +93,32 @@ def parse_response(res, verbose=True):
         for idx, distance in enumerate(distances):
 
             if distance < distance_cutoff2:
-                """
-                精确命中
-                """
                 flag = 2
                 if res['metadatas'][0][idx]['口语化回答'] == 1 or res['metadatas'][0][idx]['口语化回答'] == 2:
                     match_out = res['metadatas'][0][idx]['口语化回答1']
                 elif res['metadatas'][0][idx]['口语化回答'] == 0:
                     match_out = res['metadatas'][0][idx]['口语化回答0']
-                # match_out = res['metadatas'][0][idx]['口语化回答1'] + res['metadatas'][0][idx]['口语化回答0']
                 state_meta = res['metadatas'][0][idx]
                 result_ls.append({'result':match_out, 'flag':flag, 'idx':idx, "state":state_meta, "distance":distance})
 
-                break # 不用看其他答案了
+                break
 
             if distance < distance_cutoff1 and distance > distance_cutoff2:
-                """
-                非精确命中
-                """
                 flag = 1
                 if res['metadatas'][0][idx]['口语化回答'] == 1:
                     match_out = res['metadatas'][0][idx]['口语化回答1']
                 elif res['metadatas'][0][idx]['口语化回答'] == 0:
                     match_out = res['metadatas'][0][idx]['口语化回答0']
-                # match_out = res['metadatas'][0][idx]['口语化回答1'] + res['metadatas'][0][idx]['口语化回答0']
                 state_meta = res['metadatas'][0][idx]
                 result_ls.append({'result':match_out, 'flag':flag, 'idx':idx, "state":state_meta, "distance":distance})
 
 
-        # 筛选出优质答案
         if flag == 2:
-            # 直接返回
             result = result_ls[0]['result']
             flag = 2
             state = result_ls[0]['state']
 
         if flag == 1:
-            # 返回合并项
             result = "\n".join([x['result'] for x in result_ls])
             flag = 1
             state_ls = [x['state'] for x in result_ls]
@@ -179,19 +129,9 @@ def parse_response(res, verbose=True):
         all_match = res['metadatas'][0]
         q_match = [x['医生问诊问题'] for x in all_match]
 
-        print('----------------ChatZOC database log ----------------')
-        print('')
-        # print('ip:',)
-        print('distsnce:', distances, '\n')
-        print('知识库所有match:', q_match)
-        print('\n\n知识库选择:', result)
-        print('----------------ChatZOC database log over ----------------')
-
         return result, flag, state
 
 
-
-# 函数用于格式化提示以便传递给GPT模型
 def format_prompt(user_input, supporting_material, lang):
 
     if lang == 'ch':
@@ -204,17 +144,10 @@ def format_prompt(user_input, supporting_material, lang):
 
 
 import requests
-#调用llm
-def send_to_llm(prompt,max_tokens=2048, temperature=0.7, top_p=0.8,top_k=20,top_n_tokens=5,truncate=None,typical_p=0.95,watermark=True,repetition_penalty=1.05):
-    # Mock response simulating the behavior of an LLM
-    url = "http://10.100.168.132:1025/v1/chat/completions"
-    headers = {"Accept": "application/json","Content-Type": "application/json"}
-    data = {"model": "qwen-72B-chat","stream": False,"max_tokens": max_tokens,"messages": [{"role":"system","content": "你是由中山大学眼科中心研发的人工智能大模型惬特ZOC，你将基于眼病专业知识，为用户提出的问题提供专业、准确、有根据的回复。"},{"role": "user","content": prompt}],"temperature": temperature,"top_k": top_k,"top_n_tokens": top_n_tokens,"top_p": top_p,"truncate": truncate,"typical_p": typical_p,"watermark": watermark,"repetition_penalty": repetition_penalty}
-    response = requests.post(url, headers=headers, data=json.dumps(data))
-    response = response.json()['choices'][0]['message']['content']
-    # self.dialogue_log.append({"role": "LLM", "text": prompt})
-    # self.dialogue_log.append({"role": "LLM", "text": response})
-    return response
+def send_to_llm(prompt):
+    data = {"prompt": prompt}
+    response = requests.post("http://localhost:5008/", json=data)
+    return response.text[:-1]
 
 
 def retrieve_goal(path):
@@ -222,12 +155,10 @@ def retrieve_goal(path):
     with open(path, "r", encoding="utf-8") as json_file:
         data = json.load(json_file)
 
-    # 获取'医生问诊问题'字段的值
     inquiry_content = data.get("病历分类")
     question_numbers = data.get("问题的序号")
     question_points = data.get("问题得分")
-    # print(inquiry_content)
-    # print(question_numbers)
+
     unique_numbers = []
     unique_state = []
     unique_point = []
@@ -235,7 +166,6 @@ def retrieve_goal(path):
     pre_num = 0
     for i in range(len(question_numbers)):
         i = str(i)
-        # print(inquiry_content[i],question_numbers[i])
         if inquiry_content[i] != pre_content:
             unique_state.append({"病历分类":pre_content,"问题的序号":unique_numbers,"问题得分":unique_point})       
             unique_numbers = []
@@ -246,7 +176,6 @@ def retrieve_goal(path):
             unique_point.append(question_points[i])   
         pre_num = question_numbers[i]
     unique_state.append({"病历分类":pre_content,"问题的序号":unique_numbers,"问题得分":unique_point})
-    # print(unique_state)
     return unique_state
 
 responses_no_related = [
@@ -288,36 +217,23 @@ def loading_knowledge_base():
     return state_goal
 
 
-"""## 测试 teach agent"""
 
-# @title
-# print('-------------------开启 chatZOC 智能教学平台-----------------------------\n\n')
-# print('chatZOC 将作为模拟患者，与你进行交互，你需要向其进行提问，根据你们问诊的内容，书写病历\n')
 @app.route('/chat', methods=['POST'])
 def chat_with_chatZOC():
-    # user_input = request.json['user_input']
     user_input = request.json['messages'][0]['content']
     prev_q = request.json['messages'][0]['prev_q']
     prev_flag = request.json['messages'][0]['prev_flag']
-    # print('user_input:',user_input)
 
-    print(f"------------ chatZOC api called -------------------------\n")
     student_id = request.json['messages'][0]['student_id']
-    print('student_id:', student_id ,'user input:', user_input)
-    # Convert input to embedding and get supporting material
     res = convert_to_embedding(user_input, n_results=3)
-    # print('res:',res)
     
     supporting_material, flag, state = parse_response(res, verbose=True)
-    # print(supporting_material)
  
-    ########### 直接用标准回答
     if flag == -1:
         response_to_not_related = get_random_response_not_related()
         response_with_state = {'response':response_to_not_related, 'state': state, 'flag':flag}
         return response_with_state
 
-    ########### 没有匹配
     if flag == 0:
         print('prev_flag:',prev_flag,type(prev_flag),type(flag))
         if prev_flag != 0:
@@ -327,7 +243,6 @@ def chat_with_chatZOC():
         response_with_state = {'response':response_to_0, 'state':state, 'flag':flag}
         return response_with_state
 
-    ########### 直接用标准回答
     if flag == 2:
         if supporting_material == '柳某':
             response = '我的名字是柳某'
@@ -339,19 +254,14 @@ def chat_with_chatZOC():
         response_with_state = {'response':response, 'state': state, 'flag':flag}
         return response_with_state
 
-
-    ########## 询问大语言模型
     if flag == 1:    
-        lang = 'ch'  # 这里我们直接使用了中文
+        lang = 'ch'  
 
         new_prompt = format_prompt(user_input, supporting_material, lang)
-        
-        print("new_prompt:",new_prompt)
-        
-        # response = send_to_fastchat_api(new_prompt)
+
+
         response = send_to_llm(new_prompt)
-        print("response:",response)
-        print('\n\n\n**************full prompt*****************\n' + new_prompt + '\n\n**************FINISHED*****************\n\n\n')
+
         response_with_state = {'response':response, 'state':state, 'flag':flag}
         response_with_state = json.dumps(response_with_state)
 
