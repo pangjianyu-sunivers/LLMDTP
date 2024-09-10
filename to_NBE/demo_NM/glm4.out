@@ -1,0 +1,12 @@
+nohup: ignoring input
+ * Serving Flask app 'CHATZOC_glm4_jump_api'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5008
+ * Running on http://172.21.46.28:5008
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [12/Jun/2024 23:39:02] "POST / HTTP/1.1" 200 -
+127.0.0.1 - - [12/Jun/2024 23:39:15] "POST / HTTP/1.1" 200 -
+127.0.0.1 - - [12/Jun/2024 23:41:35] "POST / HTTP/1.1" 200 -
+127.0.0.1 - - [12/Jun/2024 23:44:01] "POST / HTTP/1.1" 200 -

@@ -1,0 +1,236 @@
+nohup: ignoring input
+
+Collecting usage statistics. To deactivate, set browser.gatherUsageStats to false.
+
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://172.21.46.28:8501
+  External URL: http://47.251.70.221:8501
+
+/root/miniconda3/envs/embedding/lib/python3.10/site-packages/pydub/utils.py:170: RuntimeWarning: Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work
+  warn("Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work", RuntimeWarning)
+2024-06-13 00:44:42.107 Uncaught app exception
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state.py", line 411, in __getitem__
+    return self._getitem(widget_id, key)
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state.py", line 456, in _getitem
+    raise KeyError
+KeyError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state_proxy.py", line 127, in __getattr__
+    return self[key]
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state_proxy.py", line 98, in __getitem__
+    return get_session_state()[key]
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/safe_session_state.py", line 93, in __getitem__
+    return self._state[key]
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state.py", line 413, in __getitem__
+    raise KeyError(_missing_key_error_message(key))
+KeyError: 'st.session_state has no key "option". Did you forget to initialize it? More info: https://docs.streamlit.io/library/advanced-features/session-state#initialization'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 600, in _run_script
+    exec(code, module.__dict__)
+  File "/home/to_NM/demo_NM/pages/begin_asking.py", line 470, in <module>
+    if st.session_state.option == 'ChatZOC':
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state_proxy.py", line 129, in __getattr__
+    raise AttributeError(_missing_attr_error_message(key))
+AttributeError: st.session_state has no attribute "option". Did you forget to initialize it? More info: https://docs.streamlit.io/library/advanced-features/session-state#initialization
+2024-06-13 00:45:55.321 Uncaught app exception
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 600, in _run_script
+    exec(code, module.__dict__)
+  File "/home/to_NM/demo_NM/pages/begin_asking.py", line 554, in <module>
+    output = json.loads(response_with_state.text)['response']
+  File "/root/miniconda3/envs/embedding/lib/python3.10/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/root/miniconda3/envs/embedding/lib/python3.10/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/root/miniconda3/envs/embedding/lib/python3.10/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2024-06-13 00:47:53.942 Uncaught app exception
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state.py", line 411, in __getitem__
+    return self._getitem(widget_id, key)
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state.py", line 456, in _getitem
+    raise KeyError
+KeyError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state_proxy.py", line 127, in __getattr__
+    return self[key]
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state_proxy.py", line 98, in __getitem__
+    return get_session_state()[key]
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/safe_session_state.py", line 93, in __getitem__
+    return self._state[key]
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state.py", line 413, in __getitem__
+    raise KeyError(_missing_key_error_message(key))
+KeyError: 'st.session_state has no key "option". Did you forget to initialize it? More info: https://docs.streamlit.io/library/advanced-features/session-state#initialization'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 600, in _run_script
+    exec(code, module.__dict__)
+  File "/home/to_NM/demo_NM/pages/begin_asking.py", line 470, in <module>
+    if st.session_state.option == 'ChatZOC':
+  File "/root/miniconda3/envs/embedding/lib/python3.10/site-packages/streamlit/runtime/state/session_state_proxy.py", line 129, in __getattr__
+    raise AttributeError(_missing_attr_error_message(key))
+AttributeError: st.session_state has no attribute "option". Did you forget to initialize it? More info: https://docs.streamlit.io/library/advanced-features/session-state#initialization
+student_id :  output Can I ask for more details? specifically is?
+有重复
+autoplay
+student_id :  output This is not very clear.
+未找到文件名为 This is not very clear..mp3 的MP3文件。
+无重复
+autoplay
+student_id :  output I'm really not sure about this issue
+有重复
+autoplay
+student_id :  output This question is not very clear.
+未找到文件名为 This question is not very clear..mp3 的MP3文件。
+无重复
+autoplay
+student_id :  output I know about glaucoma.
+未找到文件名为 I know about glaucoma..mp3 的MP3文件。
+无重复
+autoplay
+student_id :  output I know about glaucoma.
+有重复
+autoplay
+student_id : 124 output Please focus your questions on my eye disease
+有重复
+autoplay
+student_id : 124 output This problem has nothing to do with my eye disease, right?
+有重复
+autoplay
+student_id : 124 output This is my privacy
+未找到文件名为 This is my privacy.mp3 的MP3文件。
+无重复
+autoplay
+student_id : 124 output This is my privacy
+有重复
+autoplay
+student_id : 124 output Can I ask for more details? specifically is?
+有重复
+autoplay
+student_id : 124 output This is not clear
+未找到文件名为 This is not clear.mp3 的MP3文件。
+无重复
+autoplay
+student_id : 124 output This is my privacy
+有重复
+autoplay
+student_id : jiji output This is my privacy
+有重复
+autoplay
+student_id : jiji output This is my privacy
+有重复
+autoplay
+student_id : jiji output Liu
+有重复
+autoplay
+student_id : jiji output Liu
+有重复
+autoplay
+student_id : jiji output Yesterday, I had a fight with my family, and I got a little emotional. After that, my eyes started to feel uncomfortable.
+未找到文件名为 Yesterday, I had a fight with my family, and I got.mp3 的MP3文件。
+无重复
+autoplay
+student_id : jiji output Yesterday, I had a fight with my family, and I got a little emotional. After that, my eyes started to feel uncomfortable.
+有重复
+autoplay
+student_id : jiji output have
+未找到文件名为 have.mp3 的MP3文件。
+无重复
+autoplay
+student_id : jiji output have
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+未找到文件名为 Maybe, especially on the left side. After my eyes .mp3 的MP3文件。
+无重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Please focus your questions on my eye disease
+有重复
+autoplay
+student_id : jiji output I'm worried about my eye disease now. Please stop chatting.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Please focus your questions on my eye disease
+有重复
+autoplay
+student_id : jiji output Please focus your questions on my eye disease
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Maybe, especially on the left side. After my eyes hurt, I felt that my head also hurt.
+有重复
+autoplay
+student_id : jiji output Can you ask more carefully? Specifically?
+有重复
+autoplay
+student_id : jiji output This is not clear
+有重复
+autoplay
+student_id : jiji output Eyes not itchy
+未找到文件名为 Eyes not itchy.mp3 的MP3文件。
+无重复
+autoplay
+  Stopping...
