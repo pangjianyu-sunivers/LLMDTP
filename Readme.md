@@ -1,4 +1,4 @@
-*** Because we need two python version for the environment, so we should build the environment from the scratch ***
+*** We need two python version for the environment, so we should build the environment from the scratch ***
 Follow steps 1 to 4 below to set up the Python environment on a server. The framework and knowledge base used in this solution are consistent with our RCT, but the model used is not the one we have trained with LoRA. (Due to Chinese regulations, we cannot provide the trained LoRA weights.)
 
 
