@@ -17,13 +17,13 @@ pip install chromadb streamlit flask sentence_transformers requests fastapi uvic
 #### step 3 ####
 # Start the api service fisrt
 # Move to the same location of README.md, run the following code
-cd to_NM
+cd to_api
 nohup python llm_sample_api.py &
 
 #### step 4 ####
 # Now we gonna open our system, run the following code
 conda activate embedding
-cd demo_NM
+cd demo_api
 nohup python teaching_api.py &
 nohup streamlit run SP_choose.py &
 
